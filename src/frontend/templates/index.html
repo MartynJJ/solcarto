@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Solar System</title>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.137.0/build/three.min.js"></script>
+</head>
+
+<body>
+    <div id="solarSystem"></div>
+    <script>
+        function (planet) {
+        fetch('/api/orbits')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('orbit-container');
+                container.innerHTML = ''; // Clear loading message
+
+                // Process and display planet data
+                data.planets.forEach(planet => {
+                    const planetDiv = document.createElement('div');
+                    planetDiv.innerHTML = `
+                        <h2>${planet.name}</h2>
+                        <p>Orbit Radius: ${planet.orbitRadius} million km</p>
+                    `;
+                    container.appendChild(planetDiv);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching orbit data:', error);
+                const container = document.getElementById('orbit-container');
+                container.innerHTML = '<p>Failed to load orbit data. Please try again later.</p>';
+            });
+        // Basic setup for Three.js scene
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('solarSystem').appendChild(renderer.domElement);
+
+        // Load texture
+        const textureLoader = new THREE.TextureLoader();
+
+        const texture = textureLoader.load('img/sol.jpg', function (texture) {
+            // This callback is called when the texture is loaded
+            // Here you can adjust texture properties if needed
+            texture.wrapS = THREE.RepeatWrapping;
+            texture.wrapT = THREE.RepeatWrapping;
+            texture.repeat.set(1, 1);
+        });
+
+        // Draw a simple sphere for Sol
+        var geometry = new THREE.SphereGeometry(1, 24, 24);
+        // var earth_material = new THREE.MeshStandardMaterial({color: 0x6eb8d4, metalness: 0.5, roughness: 0.5});
+        var earth_geometry = new THREE.SphereGeometry(0.1, 24, 24);
+        // var material = new THREE.MeshBasicMaterial({color: })
+        var material = new THREE.MeshBasicMaterial({ map: texture });
+        var earth_material = new THREE.MeshPhongMaterial({
+            color: 0x6eb8d4,
+            specular: 0x111111,
+            shininess: 30
+        });
+        var sol = new THREE.Mesh(geometry, material);
+        var earth = new THREE.Mesh(earth_geometry, earth_material);
+        earth.position.x = 2
+        scene.add(sol);
+        scene.add(earth);
+
+        camera.position.z = 5;
+        camera.position.y = 2;
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+        var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        directionalLight.position.set(-1, -1, 1);
+        scene.add(directionalLight);
+        const light = new THREE.AmbientLight(0x404040);
+        light.position.set(5, 5, 5);
+        scene.add(light);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            sol.rotation.y += 0.01;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+
+</html>
