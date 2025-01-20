@@ -54,15 +54,7 @@ scene.add(light);
 camera.position.z = 30;
 camera.position.y = 10;
 camera.lookAt(new THREE.Vector3(0, 0, 0));
-// const controls = new OrbitControls(camera, renderer.domElement);
 
-// Optional: Custom controls settings
-// controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
-// controls.dampingFactor = 0.05;
-// controls.screenSpacePanning = false;
-// controls.minDistance = 20; // Minimum distance camera can zoom in
-// controls.maxDistance = 100; // Maximum distance camera can zoom out
-// controls.maxPolarAngle = Math.PI / 2; // Prevent the camera from going below the ground
 renderer.getContext().getExtension('OES_texture_float_linear');
 // Get current time in days
 var time = Date.now() / (1000 * 60 * 60 * 24); // days since epoch
@@ -76,11 +68,9 @@ function animate() {
         .then(response => response.json())
         .then(position => {
             earth.position.set(position.x * scaleFactor, 0, position.y * scaleFactor);
-            // console.log(earth.position)
 
         });
     sun.rotation.y += 0.01;
-    // controls.update();
     renderer.render(scene, camera);
 
 

@@ -1,4 +1,4 @@
-#include "mymath.h"
+#include "AstronomicalObjects.h"
 #include <cmath>
 
 namespace solcarto {
@@ -8,7 +8,7 @@ double calculate_orbit_radius(const double mass, const double velocity) {
   return 150.0;
 }
 
-std::pair<double, double> SolarSystem::getEarthPosition(double time) {
+std::pair<double, double> Planet::getEarthPosition(double time) {
   // Time in days, converted to radians
   double t = time * (2 * M_PI) / period;
   double r = semiMajorAxis * (1 - eccentricity * eccentricity) /
@@ -20,4 +20,4 @@ std::pair<double, double> SolarSystem::getEarthPosition(double time) {
 
   return {x, y};
 }
-};
+}; // namespace solcarto
