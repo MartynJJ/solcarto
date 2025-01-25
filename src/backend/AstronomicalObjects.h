@@ -38,10 +38,11 @@ class Planet {
 public:
   // Function to calculate position in orbit
   std::pair<double, double> getEarthPosition(double);
+  // Location getPosition(double);
 
 private:
   // Earth's orbit parameters
-  Location location_;
+  // Location location_;
   double eccentricity = 0.0167;   // Earth's orbit eccentricity
   double semiMajorAxis = 149.6e6; // km, average distance from Sun
   double period = 365.24;         // Days in a year
